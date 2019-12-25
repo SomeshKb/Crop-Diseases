@@ -70,8 +70,9 @@ print(model_transfer.fc.out_features)
 # Specify loss function and optimizer
 criterion_transfer = nn.CrossEntropyLoss()
 optimizer_transfer = optim.SGD(model_transfer.parameters(), lr=0.001, momentum=0.9)
+device = torch.device('cpu')
 
-model_transfer.load_state_dict(torch.load('model_transfer.pt'))
+model_transfer.load_state_dict(torch.load('model_transfer.pt', map_location=device))
 
 from PIL import Image
 def transform_image(image_bytes):
@@ -99,5 +100,5 @@ def predict_result(path):
         print(classes[preds])
         return preds;
 
-predict_result('/content/3.jpg')
+# predict_result('/content/3.jpg')
 
