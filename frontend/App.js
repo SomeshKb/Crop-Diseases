@@ -59,11 +59,13 @@ const App = () => {
   const uri = Object.keys(image).length
     ? image.path
     : 'https://via.placeholder.com/200';
+  const height = (image && image.cropRect && image.cropRect.height) || 300;
+  const imageStyle = {...styles.imageContainer, height};
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <View style={styles.imageContainer}>
+        <View style={imageStyle}>
           <ImageBackground source={{uri}} style={styles.imageStyle}>
             <TouchableOpacity onPress={() => setImage({})}>
               <Text style={styles.closeButton}>×</Text>
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     width: width,
-    height: 300,
   },
   button: {
     justifyContent: 'center',
