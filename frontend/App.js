@@ -8,31 +8,40 @@
 
 import React, {useState} from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
+import CameraPicker from 'react-native-image-picker';
 import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
   Text,
   ImageBackground,
+  Image,
   Dimensions,
   View,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
+
+const {width: screenWidth} = Dimensions.get('window');
 
 const App = () => {
   const [image, setImage] = useState({});
   const [loading, setLoading] = useState(false);
   const selectImage = async () => {
     try {
-      const image = await ImagePicker.openPicker({
+      const {
+        data: uri,
+        cropRect: {height, width},
+        path,
+      } = await ImagePicker.openPicker({
         cropping: true,
         includeBase64: true,
       });
 
-      console.log(image);
+      const imageObj = {uri, height, width, path};
 
-      setImage(image);
+      setImage(imageObj);
     } catch (e) {
       console.log(e);
     }
@@ -56,45 +65,74 @@ const App = () => {
       setLoading(false);
     }
   };
+
+  launchCamera = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    CameraPicker.launchCamera(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const {uri, width, height} = response;
+        const imageObj = {uri, width, height};
+        console.log('response', JSON.stringify(response));
+        setImage(imageObj);
+      }
+    });
+  };
+
   const uri = Object.keys(image).length
-    ? image.path
+    ? image.path || image.uri
     : 'https://via.placeholder.com/200';
-  const height = (image && image.cropRect && image.cropRect.height) || 300;
-  const imageStyle = {...styles.imageContainer, height};
+  const height = (image && image.height) || 300;
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <View style={imageStyle}>
-          <ImageBackground source={{uri}} style={styles.imageStyle}>
+        <ScrollView>
+          <ImageBackground
+            source={{uri}}
+            resizeMode="contain"
+            style={styles.imageContainer}>
             <TouchableOpacity onPress={() => setImage({})}>
               <Text style={styles.closeButton}>×</Text>
             </TouchableOpacity>
           </ImageBackground>
-        </View>
-        <TouchableOpacity onPress={e => selectImage()} style={styles.button}>
-          <Text style={styles.text}>Select Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={e => uploadImage()} style={styles.button}>
-          {loading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text style={styles.text}>Upload</Text>
-          )}
-        </TouchableOpacity>
+          <TouchableOpacity onPress={e => selectImage()} style={styles.button}>
+            <Text style={styles.text}>Select Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={e => launchCamera()} style={styles.button}>
+            <Text style={styles.text}>Launch Camera</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={e => uploadImage()} style={styles.button}>
+            {loading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text style={styles.text}>Upload</Text>
+            )}
+          </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
     </>
   );
 };
 
-const {width} = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   imageContainer: {
-    alignItems: 'center',
-  },
-  imageStyle: {
-    width: width,
+    width: screenWidth,
+    height: screenWidth,
+    backgroundColor: '#d3d3d3',
   },
   button: {
     justifyContent: 'center',
@@ -107,7 +145,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   closeButton: {
-    color: 'white',
     fontSize: 50,
     alignSelf: 'flex-end',
     marginHorizontal: 15,

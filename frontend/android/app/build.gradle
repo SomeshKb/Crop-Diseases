@@ -179,6 +179,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-image-picker')
     implementation project(':react-native-fs')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-image-crop-picker')
