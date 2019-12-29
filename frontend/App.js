@@ -57,7 +57,7 @@ const App = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({image: image.data}),
+        body: JSON.stringify({image: image.uri}),
       });
       setLoading(false);
     } catch (e) {
