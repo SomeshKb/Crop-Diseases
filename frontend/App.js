@@ -95,7 +95,7 @@ const App = () => {
   const uri = Object.keys(image).length
     ? image.path || image.uri
     : 'https://via.placeholder.com/200';
-  const height = (image && image.height) || 300;
+  const disabled = !Object.keys(image).length;
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -115,7 +115,13 @@ const App = () => {
           <TouchableOpacity onPress={e => launchCamera()} style={styles.button}>
             <Text style={styles.text}>Launch Camera</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={e => uploadImage()} style={styles.button}>
+          <TouchableOpacity
+            onPress={e => uploadImage()}
+            style={{
+              ...styles.button,
+              ...(disabled && {backgroundColor: '#d3d3d3'}),
+            }}
+            disabled={disabled}>
             {loading ? (
               <ActivityIndicator color="white" />
             ) : (
