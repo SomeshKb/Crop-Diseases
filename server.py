@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '/segment/')
+
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -6,8 +9,7 @@ import cv2
 # from load_pytorch import predic?t_result
 import base64
 import os
-from segment import getSegmented_Leaf
-import pdb; 
+
 
 app = Flask(__name__)
 
@@ -15,8 +17,7 @@ def imageToCV2(image):
     decoded_data = base64.b64decode(image)
     np_data = np.fromstring(decoded_data,np.uint8)
     img = cv2.imdecode(np_data,cv2.IMREAD_COLOR)
-    data = getSegmented_Leaf(img)
-    pdb.set_trace()
+    data = segment.getSegmented_Leaf(img)
     cv2.imshow("test", data)
     cv2.waitKey(0)
     

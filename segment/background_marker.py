@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import time
 from matplotlib import pyplot as plt
-import pdb; 
-
 from utils import *
 from review import files
 
@@ -226,11 +224,6 @@ def select_largest_obj(img_bin, lab_val=255, fill_mode=FILL['FLOOD'],
         # create a mask to ignore what shouldn't be filled(I think no effect)
         h_, w_ = largest_mask.shape
         mask_ = np.zeros((h_ + 2, w_ + 2), dtype=np.uint8)
-
-        print(img_floodfill)
-        print('/n')
-        print(mask_)
-        pdb.set_trace()
 
         cv2.floodFill(img_floodfill, mask_, seedPoint=bkg_seed,
                     newVal=lab_val)
