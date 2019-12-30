@@ -62,6 +62,8 @@ def segment_leaf(image_file, filling_mode=1, smooth_boundary=False, marker_inten
     bin_image[marker] = 255
     bin_image = bin_image.astype(np.uint8)
 
+    print(filling_mode)
+
     # further processing of image, filling holes, smoothing edges
     largest_mask = \
         select_largest_obj(bin_image, fill_mode=filling_mode,

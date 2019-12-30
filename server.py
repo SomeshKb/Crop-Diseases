@@ -15,8 +15,8 @@ def imageToCV2(image):
     np_data = np.fromstring(decoded_data,np.uint8)
     img = cv2.imdecode(np_data,cv2.IMREAD_COLOR)
     data = getSegmented_Leaf(img)
-    cv2.imshow("test", data)
-    cv2.waitKey(0)
+    cv2.imwrite("test.jpg", data)
+    # cv2.waitKey(0)
     
     return
 
@@ -30,9 +30,9 @@ def upload_file():
     data = request.get_json()
     # base64 string
     # print(data['image'])
-    # base64Image = data['image']
-    with open("testing_files\images.jpg", "rb") as image_file:
-        base64Image = base64.b64encode(image_file.read())
+    base64Image = data['image']
+    # with open("testing_files\images.jpg", "rb") as image_file:
+    #     base64Image = base64.b64encode(image_file.read())
 
     print(base64Image)
     imageToCV2(base64Image)

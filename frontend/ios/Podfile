@@ -43,6 +43,8 @@ target 'frontend' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'frontendTests' do
     inherit! :search_paths
     # Pods for testing

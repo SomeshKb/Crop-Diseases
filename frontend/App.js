@@ -9,6 +9,8 @@
 import React, {useState} from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import CameraPicker from 'react-native-image-picker';
+import FontistoIcon from 'react-native-vector-icons/Fontisto';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   SafeAreaView,
   StyleSheet,
@@ -96,39 +98,58 @@ const App = () => {
     ? image.path || image.uri
     : 'https://via.placeholder.com/200';
   const disabled = !Object.keys(image).length;
+  console.log(disabled);
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView>
-          <ImageBackground
-            source={{uri}}
-            resizeMode="contain"
-            style={styles.imageContainer}>
-            <TouchableOpacity onPress={() => setImage({})}>
-              <Text style={styles.closeButton}>×</Text>
-            </TouchableOpacity>
-          </ImageBackground>
-          <TouchableOpacity onPress={e => selectImage()} style={styles.button}>
-            <Text style={styles.text}>Select Image</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={e => launchCamera()} style={styles.button}>
-            <Text style={styles.text}>Launch Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={e => uploadImage()}
+      <SafeAreaView style={{flex: 1}}>
+        {disabled ? (
+          <View
             style={{
-              ...styles.button,
-              ...(disabled && {backgroundColor: '#d3d3d3'}),
-            }}
-            disabled={disabled}>
-            {loading ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <Text style={styles.text}>Upload</Text>
-            )}
-          </TouchableOpacity>
-        </ScrollView>
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              onPress={e => selectImage()}
+              style={styles.button}>
+              <FontistoIcon name="picture" color="white" />
+              <Text style={styles.text}>Select Image</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={e => launchCamera()}
+              style={styles.button}>
+              <FontistoIcon name="camera" color="white" />
+              <Text style={styles.text}>Launch Camera</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View>
+            <ImageBackground
+              source={{uri}}
+              resizeMode="contain"
+              style={styles.imageContainer}
+            />
+
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={e => uploadImage()}
+                style={styles.uploadButton}>
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text style={styles.text}>Upload</Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setImage({})}
+                style={styles.uploadButton}>
+                <Text style={styles.text}>Discard</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </SafeAreaView>
     </>
   );
@@ -145,15 +166,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
     backgroundColor: 'blue',
-    height: 50,
+    height: screenWidth / 2.2,
+    width: screenWidth / 2.2,
+    marginHorizontal: 5,
+    borderRadius: 5,
   },
   text: {
     color: 'white',
+    marginVertical: 10,
   },
   closeButton: {
     fontSize: 50,
     alignSelf: 'flex-end',
     marginHorizontal: 15,
+  },
+  uploadButton: {
+    width: screenWidth / 2.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    margin: 5,
+    borderRadius: 5,
   },
 });
 
