@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import CameraPicker from 'react-native-image-picker';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
@@ -24,12 +24,16 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 const App = () => {
   const [image, setImage] = useState({});
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    SplashScreen.hide();
+  });
   const selectImage = async () => {
     try {
       const {
