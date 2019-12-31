@@ -81,3 +81,7 @@ def predict(image):
      'Tomato_healthy']
 
     return list[np.argmax(model.predict(resize_image))]
+
+
+# https://firebasestorage.googleapis.com/v0/b/ml-model-2762c.appspot.com/o/model_num.h5?alt=media&token=ea7ec037-64c5-44fe-aa51-aa39a7fb9673
+# https://firebasestorage.googleapis.com/v0/b/ml-model-2762c.appspot.com/o/model_num.json?alt=media&token=c057ea13-9d5b-4355-9e99-e1556fe40058
