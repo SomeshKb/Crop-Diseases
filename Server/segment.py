@@ -37,7 +37,6 @@ def generate_background_marker(original_image):
 
 
 def segment_leaf(image_file, filling_mode=1, smooth_boundary=False, marker_intensity=0):
-    print(image_file, filling_mode, smooth_boundary, marker_intensity)
     """
     Segments leaf from an image file
 
@@ -61,8 +60,6 @@ def segment_leaf(image_file, filling_mode=1, smooth_boundary=False, marker_inten
     bin_image = np.zeros((original.shape[0], original.shape[1]))
     bin_image[marker] = 255
     bin_image = bin_image.astype(np.uint8)
-
-    print(filling_mode)
 
     # further processing of image, filling holes, smoothing edges
     largest_mask = \
@@ -196,7 +193,5 @@ if __name__ == '__main__':
 
 
 def getSegmented_Leaf(data):
-        print('in segment')
         original, output_image = segment_leaf(data)
         return output_image
-        print(output_image)
