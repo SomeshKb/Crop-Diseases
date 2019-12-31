@@ -9,15 +9,10 @@ Original file is located at
 
 import urllib.request
 
-print('Beginning file download with urllib2...')
-
-url = 'https://www.kaggleusercontent.com/kf/26027417/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..JF0zYlCP0om9scHZUZXZJw.lFUeJNIowk0WLnEVe7_LLWwshDtV569SmAu9zgxIdYlrMFv4aYLIE9bog5Qi56XS_P2SOEn41BnzuZU0CujFHgI3D8tomjUsncwmb6q01GPlTKgIfClXjm-1L32jueZGncgbAiMwxqAb_I02-0PB4cpbJueexbL6-HVjXJld3ITBgHtKbTtaldWcPbPAV6cY.tUDbOhARxqxwErJZyBebzQ/my_model.h5'
-urllib.request.urlretrieve(url, 'my_model.h5')
-
 import numpy as np
 import pickle
 import cv2
-from os import listdir
+import os
 from sklearn.preprocessing import LabelBinarizer
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
@@ -38,15 +33,22 @@ INIT_LR = 1e-3
 BS = 32
 default_image_size = tuple((256, 256))
 image_size = 0
-directory_root = '../input/plantvillage/'
 width=256
 height=256
 depth=3
 
 from keras.models import load_model
-model = load_model('my_model.h5')
 
-model.summary()
+def getModel():
+    if(os.path.exists('./Model/my_model.h5')):
+        # print('Model exist')
+        model = load_model('my_model.h5')
+    else:
+        # print('Beginning file download with urllib2...')
+        url = 'https://www.kaggleusercontent.com/kf/26027417/eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..JF0zYlCP0om9scHZUZXZJw.lFUeJNIowk0WLnEVe7_LLWwshDtV569SmAu9zgxIdYlrMFv4aYLIE9bog5Qi56XS_P2SOEn41BnzuZU0CujFHgI3D8tomjUsncwmb6q01GPlTKgIfClXjm-1L32jueZGncgbAiMwxqAb_I02-0PB4cpbJueexbL6-HVjXJld3ITBgHtKbTtaldWcPbPAV6cY.tUDbOhARxqxwErJZyBebzQ/my_model.h5'
+        urllib.request.urlretrieve(url, 'my_model.h5')
+        model = load_model('my_model.h5')
+
 
 def convert_image_to_array(image_dir):
     try:
@@ -60,23 +62,22 @@ def convert_image_to_array(image_dir):
         print(f"Error : {e}")
         return None
 
-test_image =  convert_image_to_array('/content/ph.jpg')
+def predict(image):
 
-# test_image.shape
-resize_image = test_image.reshape((1,) + test_image.shape)
+    # test_image =  convert_image_to_array('/content/ph.jpg')
 
-np.argmax(model.predict(resize_image))
+    # test_image.shape
+    getModel()
+    resize_image = image.reshape((1,) + image.shape)
 
-list = ['Pepper__bell___Bacterial_spot', 'Pepper__bell___healthy',
- 'Potato___Early_blight', 'Potato___Late_blight' ,'Potato___healthy',
- 'Tomato_Bacterial_spot' ,'Tomato_Early_blight' ,'Tomato_Late_blight',
- 'Tomato_Leaf_Mold', 'Tomato_Septoria_leaf_spot',
- 'Tomato_Spider_mites_Two_spotted_spider_mite' ,'Tomato__Target_Spot',
- 'Tomato__Tomato_YellowLeaf__Curl_Virus', 'Tomato__Tomato_mosaic_virus',
- 'Tomato_healthy']
+    np.argmax(model.predict(resize_image))
 
-list[np.argmax(model.predict(resize_image))]
+    list = ['Pepper__bell___Bacterial_spot', 'Pepper__bell___healthy',
+     'Potato___Early_blight', 'Potato___Late_blight' ,'Potato___healthy',
+     'Tomato_Bacterial_spot' ,'Tomato_Early_blight' ,'Tomato_Late_blight',
+     'Tomato_Leaf_Mold', 'Tomato_Septoria_leaf_spot',
+     'Tomato_Spider_mites_Two_spotted_spider_mite' ,'Tomato__Target_Spot',
+     'Tomato__Tomato_YellowLeaf__Curl_Virus', 'Tomato__Tomato_mosaic_virus',
+     'Tomato_healthy']
 
-from google.colab import drive
-drive.mount('/content/drive')
-
+    return list[np.argmax(model.predict(resize_image))]

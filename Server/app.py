@@ -7,6 +7,13 @@ import cv2
 import base64
 import os
 from segment import getSegmented_Leaf
+import sys
+sys.path.insert(0, '/Model/')
+
+from Model import load_keras
+
+
+
 
 app = Flask(__name__)
 
@@ -15,6 +22,8 @@ def imageToCV2(image):
     np_data = np.fromstring(decoded_data,np.uint8)
     img = cv2.imdecode(np_data,cv2.IMREAD_COLOR)
     data = getSegmented_Leaf(img)
+    print('data')
+    load_keras.predict(data)
     # cv2.imwrite("test.jpg", data)
     # cv2.waitKey(0)
     return data
@@ -33,7 +42,7 @@ def upload_file():
     # with open("testing_files\images.jpg", "rb") as image_file:
     #     base64Image = base64.b64encode(image_file.read())
     result = imageToCV2(base64Image)
-    return jsonify(success= 'true' )
+    return jsonify(result = result )
 
 
 if __name__ == '__main__':
