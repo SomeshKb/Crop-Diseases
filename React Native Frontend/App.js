@@ -11,6 +11,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import CameraPicker from 'react-native-image-picker';
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Toast from 'react-native-simple-toast';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -54,9 +56,10 @@ const App = () => {
   };
   const uploadImage = async () => {
     try {
-      const url = 'http://127.0.0.1:5000/api/upload';
+      
+      const url = 'http://tranquil-thicket-44678.herokuapp.com/api/upload';
       setLoading(true);
-
+      console.log('make request')
       const res = await fetch(url, {
         method: 'POST',
         headers: {
@@ -65,6 +68,9 @@ const App = () => {
         },
         body: JSON.stringify({image: image.uri}),
       });
+      console.log('done request')
+      console.log('data',res)
+      Toast.show(JSON.stringify(res),Toast.LONG)
       setLoading(false);
     } catch (e) {
       console.log(e);
