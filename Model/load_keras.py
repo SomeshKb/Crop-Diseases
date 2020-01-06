@@ -10,6 +10,7 @@ import cv2
 default_image_size = tuple((256, 256))
 
 def getModel():
+    K.clear_session()   
     model = None
     with open('./Model/model_num.json', 'r') as myfile:
         data=myfile.read()
