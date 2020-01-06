@@ -12,10 +12,6 @@ sys.path.insert(0, '/Model/')
 from Model import load_keras
 import pdb; # for debugging
 
-
-
-
-
 app = Flask(__name__)
 
 def imageToCV2(image):
