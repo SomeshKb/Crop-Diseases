@@ -5,17 +5,9 @@ from keras import backend as K
 from keras.models import model_from_json
 import json
 import pdb
+import cv2
 
-EPOCHS = 25
-INIT_LR = 1e-3
-BS = 32
 default_image_size = tuple((256, 256))
-image_size = 0
-width=256
-height=256
-depth=3
-
-
 
 def getModel():
     model = None
