@@ -6,6 +6,7 @@ from keras.models import model_from_json
 import json
 import pdb
 import cv2
+from memory_profiler import profile
 
 default_image_size = tuple((256, 256))
 
@@ -45,6 +46,7 @@ def convert_image_to_array(image_dir):
         # print(f"Error : {e}")
         return None
 
+@profile
 def predict(image):
 
     # test_image =  convert_image_to_array('/content/ph.jpg')
