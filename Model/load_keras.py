@@ -7,7 +7,7 @@ import json
 import pdb
 import cv2
 from memory_profiler import profile
-
+import gc 
 default_image_size = tuple((256, 256))
 
 def getModel():
@@ -48,6 +48,7 @@ def convert_image_to_array(image_dir):
 
 @profile
 def predict(image):
+    gc.collect()
 
     # test_image =  convert_image_to_array('/content/ph.jpg')
     # test_image.shape
@@ -68,6 +69,7 @@ def predict(image):
 
     result = list[np.argmax(model.predict(resize_image))]    
     K.clear_session()   
+    gc.collect()
     return result
 
 # https://firebasestorage.googleapis.com/v0/b/ml-model-2762c.appspot.com/o/model_num.h5?alt=media&token=ea7ec037-64c5-44fe-aa51-aa39a7fb9673
